@@ -4,9 +4,11 @@ import com.smingsming.user.domain.user.domain.User;
 import com.smingsming.user.domain.user.dto.RequestSignUpDto;
 import com.smingsming.user.domain.user.dto.ResponseSignUpDto;
 import com.smingsming.user.domain.user.repository.IUserRepository;
+import com.smingsming.user.global.config.UserType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,11 +17,14 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements IUserService {
 
     private final IUserRepository iUserRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 기본 회원가입
     @Override
     public ResponseSignUpDto userSignUp(RequestSignUpDto requestSignUpDto) {
         User user = iUserRepository.save(User.builder()
+                .role("ROLE_USER")
+                .userType(UserType.NORMAL.ordinal())
                 .userEmail(requestSignUpDto.getUserEmail())
                 .password(requestSignUpDto.getPassword())
                 .nickname(requestSignUpDto.getNickname())

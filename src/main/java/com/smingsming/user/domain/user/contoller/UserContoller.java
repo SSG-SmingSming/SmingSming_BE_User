@@ -1,7 +1,9 @@
 package com.smingsming.user.domain.user.contoller;
 
+import com.smingsming.user.domain.user.domain.User;
 import com.smingsming.user.domain.user.dto.RequestSignUpDto;
 import com.smingsming.user.domain.user.dto.ResponseSignUpDto;
+import com.smingsming.user.domain.user.repository.IUserRepository;
 import com.smingsming.user.domain.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ public class UserContoller {
     @Autowired
     Environment env;
 
-    //
+    // 서버 통신 상태 확인
     @GetMapping("/health_check")
     public String status() {
         return String.format("It's Working in Catalog Service on PORT %s",
@@ -31,4 +33,5 @@ public class UserContoller {
     public ResponseSignUpDto userSignUp(@RequestBody RequestSignUpDto requestSignUpDto) {
         return iUserService.userSignUp(requestSignUpDto);
     }
+
 }
