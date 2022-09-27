@@ -27,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/user-server/user/signup").permitAll()
                 .antMatchers("/user-server/user/login").permitAll()
-                .antMatchers("/user-server/**").authenticated()
+                .antMatchers("/user-server/**").authenticated();
         http.headers().frameOptions().disable();
     }
 }
