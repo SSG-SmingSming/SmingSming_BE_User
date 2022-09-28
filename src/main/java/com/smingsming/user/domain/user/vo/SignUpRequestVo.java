@@ -1,17 +1,18 @@
-package com.smingsming.user.domain.user.dto;
+package com.smingsming.user.domain.user.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseSignUpDto {
+public class SignUpRequestVo {
 
-    private Long id;
     private String userEmail;
+    private String password;
     private String nickname;
+
 }

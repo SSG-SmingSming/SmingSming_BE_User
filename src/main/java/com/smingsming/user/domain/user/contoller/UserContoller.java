@@ -1,13 +1,12 @@
 package com.smingsming.user.domain.user.contoller;
 
-import com.smingsming.user.domain.user.domain.User;
-import com.smingsming.user.domain.user.dto.RequestSignUpDto;
-import com.smingsming.user.domain.user.dto.ResponseSignUpDto;
-import com.smingsming.user.domain.user.repository.IUserRepository;
 import com.smingsming.user.domain.user.service.IUserService;
+import com.smingsming.user.domain.user.vo.SignUpRequestVo;
+import com.smingsming.user.domain.user.vo.SignUpResponseVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +20,9 @@ public class UserContoller {
     @Autowired
     Environment env;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     // 서버 통신 상태 확인
     @GetMapping("/health_check")
     public String status() {
@@ -30,8 +32,16 @@ public class UserContoller {
 
     // 기본 회원가입
     @PostMapping("/user/signup")
-    public ResponseSignUpDto userSignUp(@RequestBody RequestSignUpDto requestSignUpDto) {
-        return iUserService.userSignUp(requestSignUpDto);
+    public SignUpResponseVo userSignUp(@RequestBody SignUpRequestVo signUpRequestVo) {
+        return iUserService.userSignUp(signUpRequestVo);
     }
+
+    // Spring Security 가 해당 주소를 낚아채버린다 - SecurityConfig 파일 생성 후 작동 안 함
+    @GetMapping("/user/login")
+    public String login() {
+
+        return "redirect:/loginForm";
+    }
+
 
 }

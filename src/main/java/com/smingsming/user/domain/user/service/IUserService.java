@@ -1,11 +1,11 @@
 package com.smingsming.user.domain.user.service;
 
-import com.smingsming.user.domain.user.dto.RequestSignUpDto;
-import com.smingsming.user.domain.user.dto.ResponseSignUpDto;
+import com.smingsming.user.domain.user.vo.SignUpRequestVo;
+import com.smingsming.user.domain.user.vo.SignUpResponseVo;
 
 public interface IUserService {
 
     // 기본 회원가입
-    ResponseSignUpDto userSignUp(RequestSignUpDto requestSignUpDto);
+    SignUpResponseVo userSignUp(SignUpRequestVo requestSignUpDto);
 
 }
