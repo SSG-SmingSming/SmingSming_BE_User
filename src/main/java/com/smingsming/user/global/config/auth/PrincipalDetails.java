@@ -59,4 +59,3 @@ public class PrincipalDetails implements UserDetails {
         return true;
     }
 }
-

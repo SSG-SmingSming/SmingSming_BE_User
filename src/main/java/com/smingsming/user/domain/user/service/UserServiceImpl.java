@@ -19,11 +19,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
-
 
     private final IUserRepository iUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -71,6 +71,5 @@ public class UserServiceImpl implements IUserService {
                 userEntity.getPassword(),
                 new ArrayList<>()
         );
-
     }
 }

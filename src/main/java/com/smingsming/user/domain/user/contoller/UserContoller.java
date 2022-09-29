@@ -19,7 +19,7 @@ public class UserContoller {
     @Autowired
     Environment env;
 
-    //
+    // 서버 통신 상태 확인
     @GetMapping("/health_check")
     public String status() {
         return String.format("It's Working in Catalog Service on PORT %s",
@@ -29,14 +29,7 @@ public class UserContoller {
     // 기본 회원가입
     @PostMapping("/user/signup")
     public SignUpResponseVo userSignUp(@RequestBody SignUpRequestVo signUpRequestVo) {
-        String test = "";
+
         return iUserService.userSignUp(signUpRequestVo);
-    }
-
-    // Spring Security 가 해당 주소를 낚아채버린다 - SecurityConfig 파일 생성 후 작동 안 함
-    @GetMapping("/user/login")
-    public String login() {
-
-        return "/loginForm";
     }
 }
