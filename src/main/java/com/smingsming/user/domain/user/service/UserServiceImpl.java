@@ -72,4 +72,14 @@ public class UserServiceImpl implements IUserService {
                 new ArrayList<>()
         );
     }
+
+    @Override
+    public boolean checkEmail(String email) {
+        return iUserRepository.existsByUserEmail(email);
+    }
+
+    @Override
+    public boolean checkNickname(String nickname) {
+        return iUserRepository.existsByNickname(nickname);
+    }
 }

@@ -12,4 +12,10 @@ public interface IUserService extends UserDetailsService {
 
     UserDto getUserByUserId(String userId);
     UserDto getUserDetailsByEmail(String userEmail);
+
+    // 이메일 중복 여부 확인
+    boolean checkEmail(String email);
+
+    // 닉네임 중복 여부 확인
+    boolean checkNickname(String nickname);
 }
