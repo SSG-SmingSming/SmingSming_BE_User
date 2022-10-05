@@ -2,9 +2,8 @@ package com.smingsming.user.global.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smingsming.user.domain.user.dto.UserDto;
-import com.smingsming.user.domain.user.entity.UserEntity;
 import com.smingsming.user.domain.user.service.IUserService;
-import com.smingsming.user.domain.user.vo.LoginRequestVo;
+import com.smingsming.user.domain.user.vo.LoginReqVo;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +43,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         try {
-            LoginRequestVo cred = new ObjectMapper().readValue(request.getInputStream(), LoginRequestVo.class);
+            LoginReqVo cred = new ObjectMapper().readValue(request.getInputStream(), LoginReqVo.class);
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
                             cred.getUserEmail(),

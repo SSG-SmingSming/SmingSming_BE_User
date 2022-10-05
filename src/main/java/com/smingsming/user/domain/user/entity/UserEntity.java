@@ -55,6 +55,11 @@ public class UserEntity {
 
     private Date expiredDate;
 
+
+    public void updatePwd(String newPwd) {
+        this.password = newPwd;
+    }
+
     public UserEntity(String role, int userType, String userEmail, String password, String nickname, String userThumbnail, boolean leave, boolean membership) {
         this.role = role;
         this.userType = userType;
