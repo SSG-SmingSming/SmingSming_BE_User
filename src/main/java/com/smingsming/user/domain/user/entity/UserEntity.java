@@ -60,6 +60,10 @@ public class UserEntity {
         this.password = newPwd;
     }
 
+    public void updateThumbnail(String userThumbnail) {
+        this.userThumbnail = userThumbnail;
+    }
+
     public UserEntity(String role, int userType, String userEmail, String password, String nickname, String userThumbnail, boolean leave, boolean membership) {
         this.role = role;
         this.userType = userType;

@@ -5,6 +5,7 @@ import com.smingsming.user.domain.user.vo.PwdUpdateReqVo;
 import com.smingsming.user.domain.user.vo.SignUpReqVo;
 import com.smingsming.user.domain.user.vo.SignUpResVo;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,6 +25,8 @@ public interface IUserService extends UserDetailsService {
 
     // 비밀번호 수정
     boolean updatePassword(String password, HttpServletRequest request);
+    boolean updateThumbnail(MultipartFile userThumbnail, HttpServletRequest request);
+    boolean updateNickname(String nickname, HttpServletRequest request);
 
 
 }

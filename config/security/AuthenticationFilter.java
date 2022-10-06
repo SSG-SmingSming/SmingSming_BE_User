@@ -2,7 +2,6 @@ package com.smingsming.user.global.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smingsming.user.domain.user.dto.UserDto;
-import com.smingsming.user.domain.user.entity.UserEntity;
 import com.smingsming.user.domain.user.service.IUserService;
 import com.smingsming.user.domain.user.vo.LoginReqVo;
 import io.jsonwebtoken.Jwts;

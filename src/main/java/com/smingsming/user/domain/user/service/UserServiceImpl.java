@@ -7,6 +7,8 @@ import com.smingsming.user.domain.user.vo.SignUpReqVo;
 import com.smingsming.user.domain.user.vo.SignUpResVo;
 import com.smingsming.user.domain.user.repository.IUserRepository;
 import com.smingsming.user.global.common.jwt.JwtTokenProvider;
+import com.smingsming.user.global.utils.s3.FileInfoDto;
+import com.smingsming.user.global.utils.s3.S3UploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -31,6 +34,8 @@ public class UserServiceImpl implements IUserService {
     private final IUserRepository iUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final S3UploadService s3UploadService;
+
 
     // 기본 회원가입
     @Override
@@ -105,6 +110,34 @@ public class UserServiceImpl implements IUserService {
         UserEntity userEntity = iUserRepository.findById(userId).orElseThrow();
 
         userEntity.setPassword(bCryptPasswordEncoder.encode(password));
+
+        return true;
+    }
+
+    // 프로필 사진 수정
+    @Override
+    @Transactional
+    public boolean updateThumbnail(MultipartFile userThumbnail, HttpServletRequest request) {
+
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        UserEntity user = iUserRepository.findById(userId).orElseThrow();
+
+        FileInfoDto fileInfoDto = FileInfoDto.multipartOf(userThumbnail, "user");
+        String uri = s3UploadService.store(fileInfoDto, userThumbnail);
+
+        user.updateThumbnail(uri);
+
+        return true;
+    }
+
+    // 닉네임 수정
+    @Override
+    @Transactional
+    public boolean updateNickname(String nickname, HttpServletRequest request) {
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        UserEntity user = iUserRepository.findById(userId).orElseThrow();
+
+        user.setNickname(nickname);
 
         return true;
     }
