@@ -33,20 +33,26 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
-        http.addFilter(getAuthenticationFilter());
+//        http.csrf().disable();
+//        http.headers().frameOptions().disable();
+//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        http.authorizeRequests()
+//                .antMatchers("/signup, /login").permitAll()
+//                .antMatchers("/**").permitAll();
+//        http.addFilter(getAuthenticationFilter());
 
-        http.authorizeRequests()
-                .antMatchers("/signup, /login").permitAll()
-                .antMatchers("/**").permitAll()
-
-//                    .access("hasIpAddress('10.10.10.20')")
+        http.csrf().disable()
+                    .headers().frameOptions().disable()
                 .and()
-                .addFilter(getAuthenticationFilter());
+                    .httpBasic().disable()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                    .authorizeRequests()
+                    .antMatchers("/signup, /login").permitAll()
+                    .antMatchers("/**").permitAll()
+                .and()
+                    .addFilter(getAuthenticationFilter());
 
-
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     public AuthenticationFilter getAuthenticationFilter() throws Exception {
