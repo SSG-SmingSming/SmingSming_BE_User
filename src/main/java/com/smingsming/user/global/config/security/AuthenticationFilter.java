@@ -2,7 +2,6 @@ package com.smingsming.user.global.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smingsming.user.domain.user.dto.UserDto;
-import com.smingsming.user.domain.user.entity.UserEntity;
 import com.smingsming.user.domain.user.service.IUserService;
 import com.smingsming.user.domain.user.vo.LoginReqVo;
 import io.jsonwebtoken.Jwts;
@@ -74,9 +73,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .compact();
 
         response.addHeader("token", token);
-        response.addHeader("userId", userDetails.getId().toString());
-        response.setHeader("Access-Control-Expose-Headers", "token, userId");
-
+//        response.addHeader("userId", userDetails.getId());
         System.out.println("성공~_~");
     }
 

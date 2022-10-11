@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+// Security 설정에서 loginProcessingUrl("/login");
 // login 요청 오면 자동으로 UserDetailsService 타입으로 IoC되어 있는 loadUserByUsername 함수 실행
 @Service
 public class PrincipalDetailsService implements UserDetailsService {
@@ -20,9 +21,6 @@ public class PrincipalDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
 
         System.out.println("userEamil : " +userEmail);
-
-//        return iUserRepository.findByUserEmail(userEmail)
-//                .orElseThrow(() -> new UsernameNotFoundException(userEmail));
         UserEntity userEntity = iUserRepository.findByUserEmail(userEmail);
         if(userEmail !=null) {
             return new PrincipalDetails(userEntity);

@@ -2,7 +2,6 @@ package com.smingsming.user.domain.user.service;
 
 import com.smingsming.user.domain.user.dto.UserDto;
 import com.smingsming.user.domain.user.entity.UserEntity;
-import com.smingsming.user.domain.user.vo.PwdUpdateReqVo;
 import com.smingsming.user.domain.user.vo.SignUpReqVo;
 import com.smingsming.user.domain.user.vo.SignUpResVo;
 import com.smingsming.user.domain.user.repository.IUserRepository;
@@ -35,7 +34,6 @@ public class UserServiceImpl implements IUserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final S3UploadService s3UploadService;
-
 
     // 기본 회원가입
     @Override
@@ -96,6 +94,7 @@ public class UserServiceImpl implements IUserService {
     }
 
 
+    // 닉네임 중복 확인
     @Override
     public boolean checkNickname(String nickname) {
         return iUserRepository.existsByNickname(nickname);

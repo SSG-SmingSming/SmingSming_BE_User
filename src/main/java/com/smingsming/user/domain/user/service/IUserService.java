@@ -25,7 +25,9 @@ public interface IUserService extends UserDetailsService {
 
     // 비밀번호 수정
     boolean updatePassword(String password, HttpServletRequest request);
+    // 프로필 사진 수정
     boolean updateThumbnail(MultipartFile userThumbnail, HttpServletRequest request);
+    // 닉네임 수정
     boolean updateNickname(String nickname, HttpServletRequest request);
 
 
