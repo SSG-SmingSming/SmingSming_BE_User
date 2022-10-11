@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
@@ -42,14 +44,38 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String role = "ROLE_USER";
         String picture = oAuth2User.getAttribute("picture");
 
-        UserEntity userEntity = iUserRepository.findByUserEmail(username);
+        UserEntity userEntity = iUserRepository.findByUserEmail(email);
+
+        // Google 회원가입 후, 16자리 영문+숫자 랜덤 조합으로 기본 닉네임 설정
+        Random rnd = new Random();
+
+        StringBuffer buf;
+        while (true) {
+            buf = new StringBuffer();
+            for(int i=2; i<=16; i++) {
+
+                if(rnd.nextBoolean()){
+                    buf.append((char)((int)(rnd.nextInt(26))+97));
+                } else {
+                    buf.append((rnd.nextInt(10)));
+                }
+            }
+
+            boolean check = iUserRepository.existsByNickname(buf.toString());
+            if(check == false) {
+                break;
+            }
+        }
+
+        System.out.println("닉네임 : " + buf.toString());
+
 
         if(userEntity == null) {
             userEntity = UserEntity.builder()
                     .userType(UserType.Google.ordinal())
                     .userEmail(email)
                     .password(password)
-                    .nickname(providerId)
+                    .nickname(buf.toString())
                     .userThumbnail(picture)
                     .role(role)
                     .membership(false)
