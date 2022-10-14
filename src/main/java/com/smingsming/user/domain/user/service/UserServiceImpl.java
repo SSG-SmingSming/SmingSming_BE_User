@@ -2,6 +2,7 @@ package com.smingsming.user.domain.user.service;
 
 import com.smingsming.user.domain.user.dto.UserDto;
 import com.smingsming.user.domain.user.entity.UserEntity;
+import com.smingsming.user.domain.user.vo.PwdUpdateReqVo;
 import com.smingsming.user.domain.user.vo.SignUpReqVo;
 import com.smingsming.user.domain.user.vo.SignUpResVo;
 import com.smingsming.user.domain.user.repository.IUserRepository;
@@ -103,12 +104,18 @@ public class UserServiceImpl implements IUserService {
     // 비밀번호 수정
     @Override
     @Transactional
-    public boolean updatePassword(String password, HttpServletRequest request) {
+    public boolean updatePassword(PwdUpdateReqVo pwdUpdateReqVo, HttpServletRequest request) {
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
 
         UserEntity userEntity = iUserRepository.findById(userId).orElseThrow();
 
-        userEntity.setPassword(bCryptPasswordEncoder.encode(password));
+        String encPassword = bCryptPasswordEncoder.encode(pwdUpdateReqVo.getOldPassword());
+
+        if(userEntity.getPassword().equals(encPassword)) {
+            return false;
+        }
+
+        userEntity.setPassword(bCryptPasswordEncoder.encode(pwdUpdateReqVo.getNewPassword()));
 
         return true;
     }
@@ -139,5 +146,11 @@ public class UserServiceImpl implements IUserService {
         user.setNickname(nickname);
 
         return true;
+    }
+
+    // User 정보 조회
+    @Override
+    public UserEntity getUser(Long id) {
+        return iUserRepository.findById(id).orElseThrow();
     }
 }

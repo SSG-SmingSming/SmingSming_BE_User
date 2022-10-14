@@ -1,8 +1,10 @@
 package com.smingsming.user.domain.user.contoller;
 
+import com.smingsming.user.domain.user.entity.UserEntity;
 import com.smingsming.user.domain.user.vo.*;
 import com.smingsming.user.domain.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -14,8 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/user-server")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserContoller {
 
@@ -32,14 +34,14 @@ public class UserContoller {
     }
 
     // 기본 회원가입
-    @PostMapping("/user/signup")
+    @PostMapping("/signup")
     public SignUpResVo userSignUp(@RequestBody SignUpReqVo signUpReqVo) {
 
         return iUserService.userSignUp(signUpReqVo);
     }
 
     // 이메일 중복 여부 확인
-    @GetMapping("/user/checkemail")
+    @GetMapping("/checkemail")
     public ResponseEntity<?> checkEmail(@RequestBody EmailCheckReqVo checkRequestVo) {
         String email = checkRequestVo.getEmail();
 
@@ -52,7 +54,7 @@ public class UserContoller {
     }
 
     // 닉네임 중복 여부 확인
-    @GetMapping("/user/checknickname")
+    @GetMapping("/checknickname")
     public ResponseEntity<?> checkNickname(@RequestBody NicknameCheckReqVo checkRequestVo) {
         String nickname = checkRequestVo.getNickname();
 
@@ -65,12 +67,12 @@ public class UserContoller {
     }
 
     // 비밀번호 수정
-    @PutMapping("/user/update/password")
+    @PutMapping("/password")
     public ResponseEntity<?> updatePassword(@RequestBody PwdUpdateReqVo reqVo,
                                             HttpServletRequest request) {
         String newPwd = reqVo.getPassword();
 
-        boolean result = iUserService.updatePassword(newPwd, request);
+        boolean result = iUserService.updatePassword(reqVo, request);
 
         if(result)
             return ResponseEntity.status(HttpStatus.OK).body(true);
@@ -102,6 +104,14 @@ public class UserContoller {
             return ResponseEntity.status(HttpStatus.OK).body(true);
         else
             return ResponseEntity.status(HttpStatus.OK).body(false);
+    }
+
+    @GetMapping("/get/{id}")
+    public UserVo getUser(@PathVariable Long id) {
+        UserEntity user = iUserService.getUser(id);
+//        UserVo returnVo = ;
+
+        return new ModelMapper().map(user, UserVo.class);
     }
 
 }

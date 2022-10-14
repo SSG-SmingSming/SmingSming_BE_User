@@ -73,7 +73,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .compact();
 
         response.addHeader("token", token);
-//        response.addHeader("userId", userDetails.getId());
         System.out.println("성공~_~");
     }
 

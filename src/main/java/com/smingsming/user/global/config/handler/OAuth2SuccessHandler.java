@@ -33,14 +33,17 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         log.info("Principal에서 꺼낸 OAuth2User = {}", oAuth2User);
         // 최초 로그인이라면 회원가입 처리를 한다.
-        String targetUrl;
         log.info("토큰 발행 시작");
 
         String token = tokenService.createToken(userDto.getId());
+        String targetUrl = "http://127.0.0.1:3000/oauthRedirect?token="+token;
         log.info("{}", token);
-        targetUrl = UriComponentsBuilder.fromUriString("/home")
-                .queryParam("token", "token")
-                .build().toUriString();
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+
+        response.addHeader("token", token);
+        response.setHeader("Access-Control-Expose-Headers", "token");
+
+        response.sendRedirect(targetUrl);
+
+//        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 }

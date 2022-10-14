@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class PwdUpdateReqVo {
 
     private String password;
+    private String oldPassword;
+    private String newPassword;
 }
