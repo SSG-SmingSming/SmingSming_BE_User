@@ -1,11 +1,10 @@
 package com.smingsming.user.domain.user.contoller;
 
-import com.smingsming.user.domain.user.vo.NickUpdateReqVo;
-import com.smingsming.user.domain.user.vo.PwdUpdateReqVo;
-import com.smingsming.user.domain.user.vo.SignUpReqVo;
-import com.smingsming.user.domain.user.vo.SignUpResVo;
+import com.smingsming.user.domain.user.entity.UserEntity;
+import com.smingsming.user.domain.user.vo.*;
 import com.smingsming.user.domain.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -36,14 +35,16 @@ public class UserContoller {
 
     // 기본 회원가입
     @PostMapping("/signup")
-    public SignUpResVo userSignUp(@RequestBody SignUpReqVo signUpRequestVo) {
+    public SignUpResVo userSignUp(@RequestBody SignUpReqVo signUpReqVo) {
 
-        return iUserService.userSignUp(signUpRequestVo);
+        return iUserService.userSignUp(signUpReqVo);
     }
 
     // 이메일 중복 여부 확인
-    @GetMapping("/checkemail/{email}")
-    public ResponseEntity<?> checkEmail(@PathVariable(value = "email") String email) {
+    @GetMapping("/checkemail")
+    public ResponseEntity<?> checkEmail(@RequestBody EmailCheckReqVo checkRequestVo) {
+        String email = checkRequestVo.getEmail();
+
         boolean result = iUserService.checkEmail(email);
 
         if(result)
@@ -53,8 +54,10 @@ public class UserContoller {
     }
 
     // 닉네임 중복 여부 확인
-    @GetMapping("/checknickname/{nickname}")
-    public ResponseEntity<?> checkNickname(@PathVariable(value = "nickname") String nickname) {
+    @GetMapping("/checknickname")
+    public ResponseEntity<?> checkNickname(@RequestBody NicknameCheckReqVo checkRequestVo) {
+        String nickname = checkRequestVo.getNickname();
+
         boolean result = iUserService.checkNickname(nickname);
 
         if(result)
@@ -63,12 +66,13 @@ public class UserContoller {
             return ResponseEntity.status(HttpStatus.OK).body(true);
     }
 
-    @PutMapping("/update/password")
+    // 비밀번호 수정
+    @PutMapping("/password")
     public ResponseEntity<?> updatePassword(@RequestBody PwdUpdateReqVo reqVo,
                                             HttpServletRequest request) {
         String newPwd = reqVo.getPassword();
 
-        boolean result = iUserService.updatePassword(newPwd, request);
+        boolean result = iUserService.updatePassword(reqVo, request);
 
         if(result)
             return ResponseEntity.status(HttpStatus.OK).body(true);
@@ -101,4 +105,13 @@ public class UserContoller {
         else
             return ResponseEntity.status(HttpStatus.OK).body(false);
     }
+
+    @GetMapping("/get/{id}")
+    public UserVo getUser(@PathVariable Long id) {
+        UserEntity user = iUserService.getUser(id);
+//        UserVo returnVo = ;
+
+        return new ModelMapper().map(user, UserVo.class);
+    }
+
 }
