@@ -6,6 +6,7 @@ import com.smingsming.user.domain.user.vo.PwdUpdateReqVo;
 import com.smingsming.user.domain.user.vo.SignUpReqVo;
 import com.smingsming.user.domain.user.vo.SignUpResVo;
 import com.smingsming.user.domain.user.repository.IUserRepository;
+import com.smingsming.user.domain.user.vo.ThumbUpdateReqVo;
 import com.smingsming.user.global.common.jwt.JwtTokenProvider;
 import com.smingsming.user.global.utils.s3.FileInfoDto;
 import com.smingsming.user.global.utils.s3.S3UploadService;
@@ -109,9 +110,7 @@ public class UserServiceImpl implements IUserService {
 
         UserEntity userEntity = iUserRepository.findById(userId).orElseThrow();
 
-        String encPassword = bCryptPasswordEncoder.encode(pwdUpdateReqVo.getOldPassword());
-
-        if(userEntity.getPassword().equals(encPassword)) {
+        if(!bCryptPasswordEncoder.matches(pwdUpdateReqVo.getOldPassword(), userEntity.getPassword())) {
             return false;
         }
 
@@ -123,15 +122,12 @@ public class UserServiceImpl implements IUserService {
     // 프로필 사진 수정
     @Override
     @Transactional
-    public boolean updateThumbnail(MultipartFile userThumbnail, HttpServletRequest request) {
+    public boolean updateThumbnail(ThumbUpdateReqVo thumbUpdateReqVo, HttpServletRequest request) {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         UserEntity user = iUserRepository.findById(userId).orElseThrow();
 
-        FileInfoDto fileInfoDto = FileInfoDto.multipartOf(userThumbnail, "user");
-        String uri = s3UploadService.store(fileInfoDto, userThumbnail);
-
-        user.updateThumbnail(uri);
+        user.updateThumbnail(thumbUpdateReqVo.getUserThumbnail());
 
         return true;
     }

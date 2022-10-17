@@ -41,10 +41,8 @@ public class UserContoller {
     }
 
     // 이메일 중복 여부 확인
-    @GetMapping("/checkemail")
-    public ResponseEntity<?> checkEmail(@RequestBody EmailCheckReqVo checkRequestVo) {
-        String email = checkRequestVo.getEmail();
-
+    @GetMapping("/checkemail/{email}")
+    public ResponseEntity<?> checkEmail(@PathVariable(value = "email") String email) {
         boolean result = iUserService.checkEmail(email);
 
         if(result)
@@ -54,10 +52,8 @@ public class UserContoller {
     }
 
     // 닉네임 중복 여부 확인
-    @GetMapping("/checknickname")
-    public ResponseEntity<?> checkNickname(@RequestBody NicknameCheckReqVo checkRequestVo) {
-        String nickname = checkRequestVo.getNickname();
-
+    @GetMapping("/checknickname/{nickname}")
+    public ResponseEntity<?> checkNickname(@PathVariable(value = "nickname") String nickname) {
         boolean result = iUserService.checkNickname(nickname);
 
         if(result)
@@ -81,10 +77,10 @@ public class UserContoller {
     }
 
     // 프로필 사진 수정
-    @PutMapping(value = "/update/thumbnail", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<String> updateThumbnail(@RequestParam("userThumbnail") MultipartFile userThumbnail,
+    @PutMapping(value = "/update/thumbnail")
+    public ResponseEntity<String> updateThumbnail(@RequestBody ThumbUpdateReqVo updateReqVo,
                                                   HttpServletRequest request) {
-        boolean result = iUserService.updateThumbnail(userThumbnail, request);
+        boolean result = iUserService.updateThumbnail(updateReqVo, request);
 
         if (result)
             return ResponseEntity.status(HttpStatus.OK).body("수정 완료");
