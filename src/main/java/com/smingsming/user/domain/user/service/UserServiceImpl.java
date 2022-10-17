@@ -95,7 +95,6 @@ public class UserServiceImpl implements IUserService {
         return iUserRepository.existsByUserEmail(email);
     }
 
-
     // 닉네임 중복 확인
     @Override
     public boolean checkNickname(String nickname) {
@@ -110,7 +109,7 @@ public class UserServiceImpl implements IUserService {
 
         UserEntity userEntity = iUserRepository.findById(userId).orElseThrow();
 
-        if(!bCryptPasswordEncoder.matches(pwdUpdateReqVo.getOldPassword(), userEntity.getPassword())) {
+        if(! bCryptPasswordEncoder.matches(pwdUpdateReqVo.getOldPassword(), userEntity.getPassword())) {
             return false;
         }
 
