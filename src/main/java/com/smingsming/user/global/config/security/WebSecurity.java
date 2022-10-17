@@ -65,7 +65,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                     .antMatchers("/user/signup").permitAll()
                     .antMatchers("/error/**").permitAll()
                     .antMatchers("/**")
-                    .access("hasIpAddress('" + "10.10.10.194" +"')")
+                    .access("hasIpAddress('" + "10.10.10.27" +"')")
                     .anyRequest().authenticated()
 //                .permitAll()
 //                    .access("hasIpAddress('" + "10.10.10.20" +"')")
