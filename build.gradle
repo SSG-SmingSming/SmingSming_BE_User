@@ -2,6 +2,30 @@ plugins {
 	id 'org.springframework.boot' version '2.6.8'
 	id 'io.spring.dependency-management' version '1.0.13.RELEASE'
 	id 'java'
+	id 'com.google.cloud.tools.jib' version '3.3.0'
+}
+
+jib {
+	from {
+		auth {
+			username = "gpdbs2"
+			password = "dckr_pat_ORPyQsKOs8J6Q3o3vTU4KsVB3u4"
+		}
+	}
+	to {
+		image = "gpdbs2/smingsming"
+		tags = ["user"]
+		auth {
+			username = "gpdbs2"
+			password = "dckr_pat_ORPyQsKOs8J6Q3o3vTU4KsVB3u4"
+		}
+	}
+	container {
+//		volumes = ["/tmp"]
+//		environment = [
+//				"SMINGSMING_DB_USERNAME": System.getenv("SMINGSMING_DB_USERNAME"),
+//		]
+	}
 }
 
 group = 'com.smingsming'
@@ -31,7 +55,9 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
