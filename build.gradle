@@ -8,16 +8,16 @@ plugins {
 jib {
 	from {
 		auth {
-			username = "gpdbs2"
-			password = "dckr_pat_ORPyQsKOs8J6Q3o3vTU4KsVB3u4"
+			username = System.getenv("DOCKER_HUB_USERNAME")
+			password = System.getenv("DOCKER_HUB_PASSWORD")
 		}
 	}
 	to {
 		image = "gpdbs2/smingsming"
 		tags = ["user"]
 		auth {
-			username = "gpdbs2"
-			password = "dckr_pat_ORPyQsKOs8J6Q3o3vTU4KsVB3u4"
+			username = System.getenv("DOCKER_HUB_USERNAME")
+			password = System.getenv("DOCKER_HUB_PASSWORD")
 		}
 	}
 	container {
