@@ -2,12 +2,6 @@ server:
   port: '0'
 
 spring:
-  cloud:
-    config:
-      uri: http://3.35.94.116:8888/
-      name: user-server
-      profile: docker
-
   # application 정보 설정
   application:
     name: user-server
