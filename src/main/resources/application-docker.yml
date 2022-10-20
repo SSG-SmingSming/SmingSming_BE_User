@@ -4,7 +4,7 @@ server:
 spring:
   cloud:
     config:
-      uri: http://3.35.94.116:8888
+      uri: http://3.35.94.116:8888/
       name: user-server
       profile: docker
 
