@@ -16,5 +16,6 @@ spring:
     show-sql: true
   cloud:
     config:
+      url: ${gateway-server}
       name: user-server
       profile: docker
