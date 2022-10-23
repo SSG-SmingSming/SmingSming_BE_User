@@ -14,4 +14,8 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-
+  #
+  cloud:
+    config:
+      name: user-server
+      profile: docker
