@@ -40,7 +40,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("{}", token);
 
         response.addHeader("token", token);
-        response.setHeader("Access-Control-Expose-Headers", "token");
+        response.addHeader("userId", userDto.getId().toString());
+        response.setHeader("Access-Control-Expose-Headers", "token, userId");
 
         response.sendRedirect(targetUrl);
 

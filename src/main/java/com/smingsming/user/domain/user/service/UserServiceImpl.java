@@ -8,6 +8,7 @@ import com.smingsming.user.domain.user.vo.SignUpResVo;
 import com.smingsming.user.domain.user.repository.IUserRepository;
 import com.smingsming.user.domain.user.vo.ThumbUpdateReqVo;
 import com.smingsming.user.global.common.jwt.JwtTokenProvider;
+import com.smingsming.user.global.config.Role;
 import com.smingsming.user.global.utils.s3.FileInfoDto;
 import com.smingsming.user.global.utils.s3.S3UploadService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -52,6 +54,8 @@ public class UserServiceImpl implements IUserService {
             throw new RuntimeException("이미 존재하는 닉네임입니다.");
         
         userEntity.setPassword(bCryptPasswordEncoder.encode(signUpReqVo.getPassword()));
+        userEntity.setUuid(UUID.randomUUID().toString());
+        userEntity.setRole(Role.ROLE_USER.toString());
         iUserRepository.save(userEntity);
 
         SignUpResVo returnVo = new ModelMapper().map(userEntity, SignUpResVo.class);
