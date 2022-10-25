@@ -102,11 +102,10 @@ public class UserContoller {
             return ResponseEntity.status(HttpStatus.OK).body(false);
     }
 
+    // User 정보 조회
     @GetMapping("/get/{id}")
     public UserVo getUser(@PathVariable Long id) {
         UserEntity user = iUserService.getUser(id);
-//        UserVo returnVo = ;
-
         return new ModelMapper().map(user, UserVo.class);
     }
 
