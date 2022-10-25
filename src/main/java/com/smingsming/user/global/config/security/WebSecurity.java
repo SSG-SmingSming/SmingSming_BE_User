@@ -28,32 +28,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable();
-//        http.headers().frameOptions().disable();
-//        http.addFilter(getAuthenticationFilter());
-//        http.httpBasic().disable()
-//                        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//        http.authorizeRequests()
-//                    .antMatchers("/signup, /login").permitAll()
-//                    .antMatchers("/user/get/**").permitAll()
-//                    .antMatchers("/user/signup").permitAll()
-////                    .antMatchers("/**").hasRole(Role.USER.name())
-//                .anyRequest().authenticated()
-//                .and()
-//                    .logout()
-//                    .logoutSuccessUrl("/");
-////                .and()
-////                    .oauth2Login()
-////                    .userInfoEndpoint()
-////                    .userService(principalOauth2UserService)        // Google 로그인 완료된 뒤의 후처리 필요. Tip. 코드X, (엑세스토큰+사용자 프로필 정보O);
-////                .and()
-////                    .successHandler(oAuth2SuccessHandler);
-////                    .failureHandler(configFailureHandler());
-//
-//    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -61,14 +35,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
         http.addFilter(getAuthenticationFilter());
         http.authorizeRequests()
-//                    .antMatchers("/login/**").permitAll()
                     .antMatchers("/user/signup").permitAll()
                     .antMatchers("/error/**").permitAll()
                     .antMatchers("/**")
-                    .access("hasIpAddress('" + "10.10.10.27" +"')")
+                    .access("hasIpAddress('" + "10.10.10.168" +"')")
                     .anyRequest().authenticated()
-//                .permitAll()
-//                    .access("hasIpAddress('" + "10.10.10.20" +"')")
                 .and()
                     .oauth2Login()
                     .userInfoEndpoint()
@@ -80,7 +51,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     public AuthenticationFilter getAuthenticationFilter() throws Exception {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), iuserService, env);
-//        authenticationFilter.setFilterProcessesUrl("/login");
         return authenticationFilter;
     }
 

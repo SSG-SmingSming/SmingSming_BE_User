@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
@@ -79,6 +80,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .userThumbnail(picture)
                     .role(role)
                     .membership(false)
+                    .uuid(UUID.randomUUID().toString())
                     .build();
             iUserRepository.save(userEntity);
         }

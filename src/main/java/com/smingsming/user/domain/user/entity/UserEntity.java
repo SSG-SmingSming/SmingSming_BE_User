@@ -53,6 +53,8 @@ public class UserEntity {
 
     private Timestamp leaveDate;
 
+    private String uuid;
+
     @NotNull
     @Column(name = "is_membership")
     private boolean membership;
@@ -67,30 +69,31 @@ public class UserEntity {
         this.userThumbnail = userThumbnail;
     }
 
-    @Builder(builderClassName = "UserDetailRegister", builderMethodName = "userDetailRegister")
-    public UserEntity(String role, int userType, String userEmail, String password, String nickname, String userThumbnail, boolean leave, boolean membership) {
-        this.role = role;
-        this.userType = userType;
-        this.userEmail = userEmail;
-        this.password = password;
-        this.nickname = nickname;
-        this.userThumbnail = userThumbnail;
-        this.leave = leave;
-        this.membership = membership;
-    }
+//    @Builder(builderClassName = "UserDetailRegister", builderMethodName = "userDetailRegister")
+//    public UserEntity(String role, int userType, String userEmail, String password, String nickname, String userThumbnail, boolean leave, boolean membership) {
+//        this.role = role;
+//        this.userType = userType;
+//        this.userEmail = userEmail;
+//        this.password = password;
+//        this.nickname = nickname;
+//        this.userThumbnail = userThumbnail;
+//        this.leave = leave;
+//        this.membership = membership;
+//    }
 
-    @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
-    public UserEntity(String role, int userType, String userEmail, String password, String nickname, String userThumbnail, boolean leave, boolean membership, String provider, String providerId) {
-        this.role = role;
-        this.userType = userType;
-        this.userEmail = userEmail;
-        this.password = password;
-        this.nickname = nickname;
-        this.userThumbnail = userThumbnail;
-        this.leave = leave;
-        this.membership = membership;
-        this.provider = provider;
-        this.providerId = providerId;
-    }
+//    @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
+//    public UserEntity(String role, int userType, String userEmail, String password, String nickname, String userThumbnail, boolean leave, boolean membership, String provider, String providerId, String uuid) {
+//        this.role = role;
+//        this.userType = userType;
+//        this.userEmail = userEmail;
+//        this.password = password;
+//        this.nickname = nickname;
+//        this.userThumbnail = userThumbnail;
+//        this.leave = leave;
+//        this.membership = membership;
+//        this.provider = provider;
+//        this.providerId = providerId;
+//        this.uuid = uuid;
+//    }
 
 }

@@ -1,6 +1,7 @@
 package com.smingsming.user.domain.user.service;
 
 import com.smingsming.user.domain.user.dto.UserDto;
+import com.smingsming.user.domain.user.entity.Role;
 import com.smingsming.user.domain.user.entity.UserEntity;
 import com.smingsming.user.domain.user.vo.PwdUpdateReqVo;
 import com.smingsming.user.domain.user.vo.SignUpReqVo;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -52,6 +54,8 @@ public class UserServiceImpl implements IUserService {
             throw new RuntimeException("이미 존재하는 닉네임입니다.");
         
         userEntity.setPassword(bCryptPasswordEncoder.encode(signUpReqVo.getPassword()));
+        userEntity.setUuid(UUID.randomUUID().toString());
+        userEntity.setRole(Role.ROLE_USER.toString());
         iUserRepository.save(userEntity);
 
         SignUpResVo returnVo = new ModelMapper().map(userEntity, SignUpResVo.class);
