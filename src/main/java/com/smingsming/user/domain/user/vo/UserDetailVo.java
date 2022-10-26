@@ -10,10 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserVo {
+public class UserDetailVo {
     private Long id;
-    private String name;
-    private String thumbnail;
-    private boolean isFollow;
+    private String userEmail;
+    private String nickName;
+    private String userThumbnail;
 }
-
