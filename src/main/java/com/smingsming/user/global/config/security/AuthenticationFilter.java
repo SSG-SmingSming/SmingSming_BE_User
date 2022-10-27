@@ -74,6 +74,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         response.addHeader("token", token);
         response.addHeader("userId", userDetails.getId().toString());
+
         response.setHeader("Access-Control-Expose-Headers", "token, userId");
         System.out.println("성공~_~");
     }
