@@ -1,32 +1,29 @@
 package com.smingsming.user.domain.user.service;
 
 import com.smingsming.user.domain.user.dto.UserDto;
+import com.smingsming.user.domain.user.entity.Role;
 import com.smingsming.user.domain.user.entity.UserEntity;
-import com.smingsming.user.domain.user.vo.PwdUpdateReqVo;
-import com.smingsming.user.domain.user.vo.SignUpReqVo;
-import com.smingsming.user.domain.user.vo.SignUpResVo;
+import com.smingsming.user.domain.user.vo.*;
 import com.smingsming.user.domain.user.repository.IUserRepository;
-import com.smingsming.user.domain.user.vo.ThumbUpdateReqVo;
 import com.smingsming.user.global.common.jwt.JwtTokenProvider;
-import com.smingsming.user.global.config.Role;
-import com.smingsming.user.global.utils.s3.FileInfoDto;
-import com.smingsming.user.global.utils.s3.S3UploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
 
 
 @Service
@@ -37,7 +34,6 @@ public class UserServiceImpl implements IUserService {
     private final IUserRepository iUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-    private final S3UploadService s3UploadService;
 
     // 기본 회원가입
     @Override
@@ -149,7 +145,34 @@ public class UserServiceImpl implements IUserService {
 
     // User 정보 조회
     @Override
-    public UserEntity getUser(Long id) {
-        return iUserRepository.findById(id).orElseThrow();
+    public UserDetailVo getUser(Long id) {
+        UserEntity user = iUserRepository.findById(id).orElseThrow();
+
+        return  UserDetailVo.builder()
+                .id(user.getId())
+                .nickName(user.getNickname())
+                .userThumbnail(user.getUserThumbnail())
+                .userEmail(user.getUserEmail())
+                .build();
+    }
+
+    // User 검색
+    @Override
+    public List<UserDetailVo> searchUser(String keyword, int page, HttpServletRequest request) {
+        Pageable pr = PageRequest.of(page - 1 , 20, Sort.by("id").descending());
+
+        List<UserEntity> userList = iUserRepository.findAllByNicknameContains(pr, keyword);
+        List<UserDetailVo> returnVo = new ArrayList<>();
+
+        userList.forEach(user -> {
+            returnVo.add(UserDetailVo.builder()
+                    .id(user.getId())
+                    .nickName(user.getNickname())
+                    .userThumbnail(user.getUserThumbnail())
+                    .userEmail(user.getUserEmail())
+                    .build()) ;
+        });
+
+        return returnVo;
     }
 }

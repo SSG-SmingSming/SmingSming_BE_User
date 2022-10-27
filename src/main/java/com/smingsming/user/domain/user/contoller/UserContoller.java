@@ -4,16 +4,14 @@ import com.smingsming.user.domain.user.entity.UserEntity;
 import com.smingsming.user.domain.user.vo.*;
 import com.smingsming.user.domain.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -38,6 +36,16 @@ public class UserContoller {
     public SignUpResVo userSignUp(@RequestBody SignUpReqVo signUpReqVo) {
 
         return iUserService.userSignUp(signUpReqVo);
+    }
+
+    // 회원 검색
+    @GetMapping("/search")
+    public ResponseEntity<?> userSearch(@RequestParam(defaultValue = "") String keyword,
+                                        @RequestParam(name = "page", defaultValue = "1") int page,
+                                        HttpServletRequest request) {
+        List<UserDetailVo> result = iUserService.searchUser(keyword, page, request);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     // 이메일 중복 여부 확인
@@ -104,9 +112,9 @@ public class UserContoller {
 
     // User 정보 조회
     @GetMapping("/get/{id}")
-    public UserVo getUser(@PathVariable Long id) {
-        UserEntity user = iUserService.getUser(id);
-        return new ModelMapper().map(user, UserVo.class);
-    }
+    public UserDetailVo getUser(@PathVariable Long id) {
+        UserDetailVo user = iUserService.getUser(id);
 
+        return user;
+    }
 }
