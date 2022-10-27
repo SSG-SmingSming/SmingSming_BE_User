@@ -113,6 +113,7 @@ public class UserContoller {
     // User 정보 조회
     @GetMapping("/get/{id}")
     public UserDetailVo getUser(@PathVariable Long id) {
+
         UserDetailVo user = iUserService.getUser(id);
 
         return user;

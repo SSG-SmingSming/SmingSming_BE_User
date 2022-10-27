@@ -175,4 +175,24 @@ public class UserServiceImpl implements IUserService {
 
         return returnVo;
     }
+
+    // User 검색
+    @Override
+    public List<UserVo> searchUser(String keyword, int page, HttpServletRequest request) {
+        Pageable pr = PageRequest.of(page - 1 , 20, Sort.by("id").descending());
+
+        List<UserEntity> userList = iUserRepository.findAllByNicknameContains(pr, keyword);
+        List<UserVo> returnVo = new ArrayList<>();
+
+        userList.forEach(v -> {
+            returnVo.add(UserVo.builder()
+                            .id(v.getId())
+                            .name(v.getNickname())
+                            .thumbnail(v.getUserThumbnail())
+                            .isFollow(false)
+                    .build()) ;
+        });
+
+        return returnVo;
+    }
 }

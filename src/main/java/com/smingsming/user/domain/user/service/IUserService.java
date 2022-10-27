@@ -21,5 +21,4 @@ public interface IUserService extends UserDetailsService {
     boolean updateNickname(String nickname, HttpServletRequest request);
     UserDetailVo getUser(Long id);
     List<UserDetailVo> searchUser(String keyword, int page, HttpServletRequest request);
-
 }
