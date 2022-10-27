@@ -2,14 +2,11 @@ package com.smingsming.user.domain.user.service;
 
 import com.smingsming.user.domain.user.dto.UserDto;
 import com.smingsming.user.domain.user.entity.UserEntity;
-import com.smingsming.user.domain.user.vo.PwdUpdateReqVo;
-import com.smingsming.user.domain.user.vo.SignUpReqVo;
-import com.smingsming.user.domain.user.vo.SignUpResVo;
-import com.smingsming.user.domain.user.vo.ThumbUpdateReqVo;
+import com.smingsming.user.domain.user.vo.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface IUserService extends UserDetailsService {
 
@@ -22,5 +19,6 @@ public interface IUserService extends UserDetailsService {
     boolean updatePassword(PwdUpdateReqVo pwdUpdateReqVo, HttpServletRequest request);
     boolean updateThumbnail(ThumbUpdateReqVo thumbUpdateReqVo, HttpServletRequest request);
     boolean updateNickname(String nickname, HttpServletRequest request);
-    UserEntity getUser(Long id);
+    UserDetailVo getUser(Long id);
+    List<UserDetailVo> searchUser(String keyword, int page, HttpServletRequest request);
 }

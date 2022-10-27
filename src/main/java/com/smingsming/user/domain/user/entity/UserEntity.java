@@ -42,6 +42,8 @@ public class UserEntity {
     @NotNull
     private String nickname;
 
+    private String uuid;
+
     private String userThumbnail;
 
     @CreationTimestamp
@@ -95,5 +97,6 @@ public class UserEntity {
 //        this.providerId = providerId;
 //        this.uuid = uuid;
 //    }
+
 
 }
