@@ -55,8 +55,6 @@ public class UserEntity {
 
     private Timestamp leaveDate;
 
-    private String uuid;
-
     @NotNull
     @Column(name = "is_membership")
     private boolean membership;
