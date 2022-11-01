@@ -11,4 +11,6 @@ public interface IUserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByUserEmail(String userEmail);
     boolean existsByNickname(String nickname);
     List<UserEntity> findAllByNicknameContains(Pageable pr, String nickname);
+
+    Integer countByNicknameContains(String keyword);
 }

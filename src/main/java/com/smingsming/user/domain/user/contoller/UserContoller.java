@@ -43,7 +43,7 @@ public class UserContoller {
     public ResponseEntity<?> userSearch(@RequestParam(defaultValue = "") String keyword,
                                         @RequestParam(name = "page", defaultValue = "1") int page,
                                         HttpServletRequest request) {
-        List<UserDetailVo> result = iUserService.searchUser(keyword, page, request);
+        UserSearchVo result = iUserService.searchUser(keyword, page, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
