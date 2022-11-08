@@ -35,13 +35,14 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // 최초 로그인이라면 회원가입 처리를 한다.
         log.info("토큰 발행 시작");
 
-        String token = tokenService.createToken(userDto.getId());
+        String token = tokenService.createToken(userDto.getId(), userDto.getUuid());
         String targetUrl = "http://127.0.0.1:3000/oauthRedirect?token="+token;
         log.info("{}", token);
 
         response.addHeader("token", token);
         response.addHeader("userId", userDto.getId().toString());
-        response.setHeader("Access-Control-Expose-Headers", "token, userId");
+        response.addHeader("userNick", userDto.getNickname());
+        response.setHeader("Access-Control-Expose-Headers", "token, userId, userNick");
 
         response.sendRedirect(targetUrl);
 

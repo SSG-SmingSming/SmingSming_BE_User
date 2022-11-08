@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,7 +25,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -106,9 +106,10 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public boolean updatePassword(PwdUpdateReqVo pwdUpdateReqVo, HttpServletRequest request) {
-        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+//        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        String userId = jwtTokenProvider.getUuid(jwtTokenProvider.resolveToken(request));
 
-        UserEntity userEntity = iUserRepository.findById(userId).orElseThrow();
+        UserEntity userEntity = iUserRepository.findByUuid(userId);
 
         if(! bCryptPasswordEncoder.matches(pwdUpdateReqVo.getOldPassword(), userEntity.getPassword())) {
             return false;
@@ -124,8 +125,10 @@ public class UserServiceImpl implements IUserService {
     @Transactional
     public boolean updateThumbnail(ThumbUpdateReqVo thumbUpdateReqVo, HttpServletRequest request) {
 
-        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
-        UserEntity user = iUserRepository.findById(userId).orElseThrow();
+//        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        String userId = jwtTokenProvider.getUuid(jwtTokenProvider.resolveToken(request));
+
+        UserEntity user = iUserRepository.findByUuid(userId);
 
         user.updateThumbnail(thumbUpdateReqVo.getUserThumbnail());
 
@@ -146,11 +149,11 @@ public class UserServiceImpl implements IUserService {
 
     // User 정보 조회
     @Override
-    public UserDetailVo getUser(Long id) {
-        UserEntity user = iUserRepository.findById(id).orElseThrow();
+    public UserDetailVo getUser(String id) {
+        UserEntity user = iUserRepository.findByUuid(id);
 
         return  UserDetailVo.builder()
-                .id(user.getId())
+                .id(user.getUuid())
                 .nickName(user.getNickname())
                 .userThumbnail(user.getUserThumbnail())
                 .userEmail(user.getUserEmail())
@@ -159,41 +162,25 @@ public class UserServiceImpl implements IUserService {
 
     // User 검색
     @Override
-    public List<UserDetailVo> searchUser(String keyword, int page, HttpServletRequest request) {
+    public UserSearchVo searchUser(String keyword, int page, HttpServletRequest request) {
         Pageable pr = PageRequest.of(page - 1 , 20, Sort.by("id").descending());
 
-        List<UserEntity> userList = iUserRepository.findAllByNicknameContains(pr, keyword);
+        Page<UserEntity> userList = iUserRepository.findAllByNicknameContains(pr, keyword);
         List<UserDetailVo> returnVo = new ArrayList<>();
 
         userList.forEach(user -> {
             returnVo.add(UserDetailVo.builder()
-                    .id(user.getId())
+                    .id(user.getUuid())
                     .nickName(user.getNickname())
                     .userThumbnail(user.getUserThumbnail())
                     .userEmail(user.getUserEmail())
                     .build()) ;
         });
 
-        return returnVo;
+        return UserSearchVo.builder()
+                .count(userList.getTotalElements())
+                .result(returnVo)
+                .build();
     }
 
-    // User 검색
-    @Override
-    public List<UserVo> searchUser(String keyword, int page, HttpServletRequest request) {
-        Pageable pr = PageRequest.of(page - 1 , 20, Sort.by("id").descending());
-
-        List<UserEntity> userList = iUserRepository.findAllByNicknameContains(pr, keyword);
-        List<UserVo> returnVo = new ArrayList<>();
-
-        userList.forEach(v -> {
-            returnVo.add(UserVo.builder()
-                            .id(v.getId())
-                            .name(v.getNickname())
-                            .thumbnail(v.getUserThumbnail())
-                            .isFollow(false)
-                    .build()) ;
-        });
-
-        return returnVo;
-    }
 }

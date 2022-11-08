@@ -38,7 +38,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                     .antMatchers("/user/signup").permitAll()
                     .antMatchers("/error/**").permitAll()
                     .antMatchers("/**")
-                    .access("hasIpAddress('" + "10.10.10.168" +"')")
+//                .permitAll()
+                    .access("hasIpAddress('" + "10.10.10.29" +"')")
                     .anyRequest().authenticated()
                 .and()
                     .oauth2Login()
@@ -46,7 +47,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                     .userService(principalOauth2UserService)        // Google 로그인 완료된 뒤의 후처리 필요. Tip. 코드X, (엑세스토큰+사용자 프로필 정보O);
                 .and()
                     .successHandler(oAuth2SuccessHandler);
-
     }
 
     public AuthenticationFilter getAuthenticationFilter() throws Exception {

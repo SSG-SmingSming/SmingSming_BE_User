@@ -1,9 +1,11 @@
 package com.smingsming.user.global.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.openid.connect.sdk.claims.ClaimsSet;
 import com.smingsming.user.domain.user.dto.UserDto;
 import com.smingsming.user.domain.user.service.IUserService;
 import com.smingsming.user.domain.user.vo.LoginReqVo;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -65,15 +67,19 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         // todo : token
         String userName = ((User)authResult.getPrincipal()).getUsername();
         UserDto userDetails = userService.getUserDetailsByEmail(userName);
+        Claims claims = Jwts.claims();
+        claims.put("userNick", userDetails.getNickname());
+        claims.put("uuid", userDetails.getUUID());
         String token = Jwts.builder()
                 .setSubject(userDetails.getId().toString())
+                .setClaims(claims)
                 .setExpiration(new Date(System.currentTimeMillis() +
                         Long.parseLong(env.getProperty("token.expiration_time"))))
                 .signWith(SignatureAlgorithm.HS512, env.getProperty("token.secret"))
                 .compact();
 
         response.addHeader("token", token);
-        response.addHeader("userId", userDetails.getId().toString());
+        response.addHeader("userId", userDetails.getUUID());
 
         response.setHeader("Access-Control-Expose-Headers", "token, userId");
         System.out.println("성공~_~");

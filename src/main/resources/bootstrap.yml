@@ -3,4 +3,3 @@ spring:
     config:
       uri: http://3.35.94.116:8888
       name: user-server
-      profile: docker

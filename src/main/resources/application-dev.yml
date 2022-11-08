@@ -1,5 +1,5 @@
 server:
-  port: '0'
+  port: 0
 
 spring:
   # application 정보 설정

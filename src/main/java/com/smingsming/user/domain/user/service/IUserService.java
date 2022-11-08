@@ -19,6 +19,6 @@ public interface IUserService extends UserDetailsService {
     boolean updatePassword(PwdUpdateReqVo pwdUpdateReqVo, HttpServletRequest request);
     boolean updateThumbnail(ThumbUpdateReqVo thumbUpdateReqVo, HttpServletRequest request);
     boolean updateNickname(String nickname, HttpServletRequest request);
-    UserDetailVo getUser(Long id);
-    List<UserDetailVo> searchUser(String keyword, int page, HttpServletRequest request);
+    UserDetailVo getUser(String id);
+    UserSearchVo searchUser(String keyword, int page, HttpServletRequest request);
 }

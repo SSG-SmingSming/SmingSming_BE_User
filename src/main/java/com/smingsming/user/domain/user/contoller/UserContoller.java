@@ -43,7 +43,7 @@ public class UserContoller {
     public ResponseEntity<?> userSearch(@RequestParam(defaultValue = "") String keyword,
                                         @RequestParam(name = "page", defaultValue = "1") int page,
                                         HttpServletRequest request) {
-        List<UserDetailVo> result = iUserService.searchUser(keyword, page, request);
+        UserSearchVo result = iUserService.searchUser(keyword, page, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -112,7 +112,7 @@ public class UserContoller {
 
     // User 정보 조회
     @GetMapping("/get/{id}")
-    public UserDetailVo getUser(@PathVariable Long id) {
+    public UserDetailVo getUser(@PathVariable String id) {
 
         UserDetailVo user = iUserService.getUser(id);
 
