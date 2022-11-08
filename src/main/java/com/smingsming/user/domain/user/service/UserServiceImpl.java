@@ -168,6 +168,8 @@ public class UserServiceImpl implements IUserService {
         Page<UserEntity> userList = iUserRepository.findAllByNicknameContains(pr, keyword);
         List<UserDetailVo> returnVo = new ArrayList<>();
 
+        int count = iUserRepository.countByNicknameContains(keyword);
+
         userList.forEach(user -> {
             returnVo.add(UserDetailVo.builder()
                     .id(user.getUuid())
