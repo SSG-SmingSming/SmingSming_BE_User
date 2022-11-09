@@ -7,6 +7,7 @@ import com.smingsming.user.global.config.auth.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -24,6 +25,9 @@ import java.io.IOException;
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtTokenProvider tokenService;
 
+    @Value("${test.redirect-uri}")
+    private String redirectUri;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
@@ -36,16 +40,15 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         log.info("토큰 발행 시작");
 
         String token = tokenService.createToken(userDto.getId(), userDto.getUuid());
-        String targetUrl = "http://127.0.0.1:3000/oauthRedirect?token="+token;
+        String targetUrl = redirectUri + "/oauthRedirect?token="+token+"&userid="+userDto.getUuid();
         log.info("{}", token);
 
         response.addHeader("token", token);
-        response.addHeader("userId", userDto.getId().toString());
+        response.addHeader("userId", userDto.getUuid().toString());
         response.addHeader("userNick", userDto.getNickname());
         response.setHeader("Access-Control-Expose-Headers", "token, userId, userNick");
 
         response.sendRedirect(targetUrl);
 
-//        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 }

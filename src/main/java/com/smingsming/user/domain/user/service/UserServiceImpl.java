@@ -139,12 +139,15 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public boolean updateNickname(String nickname, HttpServletRequest request) {
-        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
-        UserEntity user = iUserRepository.findById(userId).orElseThrow();
+        String uuid = String.valueOf(jwtTokenProvider.getUuid(jwtTokenProvider.resolveToken(request)));
+        UserEntity user = iUserRepository.findByUuid(uuid);
 
-        user.setNickname(nickname);
+        if(uuid.matches(user.getUuid())) {
+            user.setNickname(nickname);
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     // User 정보 조회

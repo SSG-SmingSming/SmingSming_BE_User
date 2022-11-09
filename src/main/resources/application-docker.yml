@@ -19,3 +19,6 @@ spring:
     config:
       name: user-server
       profile: docker
+
+test:
+  redirect-uri: http://3.35.94.116:3000

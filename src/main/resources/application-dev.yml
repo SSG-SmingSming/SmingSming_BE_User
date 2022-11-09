@@ -18,3 +18,7 @@ spring:
     config:
       name: user-server
       profile: dev
+
+
+test:
+  redirect-uri: http://10.10.10.29:3000
