@@ -77,7 +77,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .userEmail(email)
                     .password(password)
                     .nickname(buf.toString())
-                    .userThumbnail(picture)
                     .role(role)
                     .membership(false)
                     .uuid(UUID.randomUUID().toString())
